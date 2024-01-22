@@ -17,7 +17,7 @@ public class RefreshTokenController {
     @Autowired
     private RefreshTokenRepository refreshTokenRepository;
 
-    @GetMapping("email/{email}")
+    @GetMapping("${mapping.refresh.getByEmail}/{email}")
     public ResponseEntity<String> getById(@PathVariable("email") String email){
         RefreshToken rt = refreshTokenRepository.findById(email).orElse(null);
         if (rt == null){
@@ -27,7 +27,7 @@ public class RefreshTokenController {
         Logger.getGlobal().info("get refresh token for email " + email + " success ");
         return ResponseEntity.ok(rt.getToken());
     }
-    @PostMapping("save")
+    @PostMapping("${mapping.refresh.save}")
     public ResponseEntity<Void> save(@RequestBody RefreshToken data){
         if (data.getEmail() == null || data.getEmail().isEmpty()){
             Logger.getGlobal().info("bad request: email is null or empty");
@@ -41,10 +41,10 @@ public class RefreshTokenController {
         Logger.getGlobal().info("save refresh token for email " + data.getEmail() + " success ");
         return ResponseEntity.ok().build();
     }
-    @DeleteMapping("delete/{email}")
+    @DeleteMapping("${mapping.refresh.delete}/{email}")
     public ResponseEntity<List<Void>> deleteById(@PathVariable("email") String email){
         refreshTokenRepository.deleteById(email);
-        Logger.getGlobal().info("save refresh token for email " + email + " success ");
+        Logger.getGlobal().info("delete refresh token for email " + email + " success ");
         return ResponseEntity.ok().build();
     }
 }
