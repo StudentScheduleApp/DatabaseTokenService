@@ -11,7 +11,6 @@ import java.util.List;
 import java.util.logging.Logger;
 
 @RestController
-@RequestMapping("api/refresh")
 public class RefreshTokenController {
 
     @Autowired
