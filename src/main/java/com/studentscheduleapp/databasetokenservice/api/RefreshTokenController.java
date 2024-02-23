@@ -28,11 +28,11 @@ public class RefreshTokenController {
     @PostMapping("${mapping.refresh.save}")
     public ResponseEntity<Void> save(@RequestBody RefreshToken data){
         if (data.getEmail() == null || data.getEmail().isEmpty()){
-            log.info("bad request: refreshToken email is null or empty");
+            log.warn("bad request: refreshToken email is null or empty");
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
         if (data.getToken() == null || data.getToken().isEmpty()){
-            log.info("bad request: refreshToken token is null or empty");
+            log.warn("bad request: refreshToken token is null or empty");
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
         RefreshToken d = refreshTokenRepository.save(data);
