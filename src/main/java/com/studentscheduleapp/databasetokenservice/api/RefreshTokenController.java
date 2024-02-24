@@ -2,10 +2,10 @@ package com.studentscheduleapp.databasetokenservice.api;
 
 import com.studentscheduleapp.databasetokenservice.data.repositories.RefreshTokenRepository;
 import com.studentscheduleapp.databasetokenservice.data.tablemodels.RefreshToken;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
