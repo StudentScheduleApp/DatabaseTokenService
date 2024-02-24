@@ -35,6 +35,14 @@ public class RefreshTokenController {
             log.warn("bad request: refreshToken token is null or empty");
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
+        if(data.getEmail().length() > 255) {
+            log.warn("bad request: refreshToken email length > 255");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
+        if(data.getToken().length() > 255) {
+            log.warn("bad request: refreshToken token length > 255");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        }
         RefreshToken d = refreshTokenRepository.save(data);
         log.info("save refreshToken with email: " + d.getEmail());
         return ResponseEntity.ok().build();
