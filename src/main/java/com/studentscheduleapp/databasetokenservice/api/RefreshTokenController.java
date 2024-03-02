@@ -10,6 +10,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.util.List;
 
 @RestController
@@ -21,13 +23,20 @@ public class RefreshTokenController {
 
     @GetMapping("${mapping.refresh.getByEmail}/{email}")
     public ResponseEntity<String> getById(@PathVariable("email") String email) {
-        RefreshToken rt = refreshTokenRepository.findById(email).orElse(null);
-        log.info("get refreshToken with email: " + email);
-        return ResponseEntity.ok(rt == null ? null : rt.getToken());
+        try {
+            RefreshToken rt = refreshTokenRepository.findById(email).orElse(null);
+            log.info("get refreshToken with email: " + email);
+            return ResponseEntity.ok(rt == null ? null : rt.getToken());
+        } catch (Exception e) {
+            StringWriter errors = new StringWriter();
+            e.printStackTrace(new PrintWriter(errors));
+            log.error("get refreshToken with email: " + email + " failed: " + errors);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
     }
 
     @PostMapping("${mapping.refresh.save}")
-    public ResponseEntity<Void> save(@RequestBody RefreshToken data) {
+    public ResponseEntity<RefreshToken> save(@RequestBody RefreshToken data) {
         if (data.getEmail() == null || data.getEmail().isEmpty()) {
             log.warn("bad request: refreshToken email is null or empty");
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
@@ -44,9 +53,16 @@ public class RefreshTokenController {
             log.warn("bad request: refreshToken token length > 255");
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
-        RefreshToken d = refreshTokenRepository.save(data);
-        log.info("save refreshToken with email: " + d.getEmail());
-        return ResponseEntity.ok().build();
+        try {
+            RefreshToken d = refreshTokenRepository.save(data);
+            log.info("save refreshToken with email: " + d.getEmail());
+            return ResponseEntity.ok(d);
+        } catch (Exception e) {
+            StringWriter errors = new StringWriter();
+            e.printStackTrace(new PrintWriter(errors));
+            log.error("save refreshToken with email: " + data.getEmail() + " failed: " + errors);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
     }
 
     @DeleteMapping("${mapping.refresh.delete}/{email}")
@@ -56,6 +72,11 @@ public class RefreshTokenController {
             log.info("delete refreshToken with email: " + email);
         } catch (EmptyResultDataAccessException e) {
             log.warn("delete refreshToken with email: " + email + " failed: entity not exists");
+        } catch (Exception e) {
+            StringWriter errors = new StringWriter();
+            e.printStackTrace(new PrintWriter(errors));
+            log.error("delete refreshToken with email: " + email + " failed: " + errors);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
         return ResponseEntity.ok().build();
     }
