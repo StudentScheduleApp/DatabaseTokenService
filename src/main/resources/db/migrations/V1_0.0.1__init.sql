@@ -1,8 +1,4 @@
--- Table: public.refresh_tokens
-
--- DROP TABLE IF EXISTS public.refresh_tokens;
-
-CREATE TABLE IF NOT EXISTS public.refresh_tokens
+CREATE TABLE IF NOT EXISTS refresh_tokens
 (
     email character varying(255) COLLATE pg_catalog."default" NOT NULL,
     token character varying(255) COLLATE pg_catalog."default" NOT NULL,
@@ -10,6 +6,3 @@ CREATE TABLE IF NOT EXISTS public.refresh_tokens
 )
 
 TABLESPACE pg_default;
-
-ALTER TABLE IF EXISTS public.refresh_tokens
-    OWNER to postgres;
